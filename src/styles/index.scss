@@ -5,7 +5,14 @@
 
     //  color
     color: var(--color);
+    box-sizing: border-box;
 
     //  bg
     background-color: var(--bg);
+
+    .wrapper {
+        min-height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
 }
