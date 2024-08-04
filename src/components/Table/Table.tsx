@@ -1,11 +1,13 @@
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Skeleton } from '@mui/material';
 import { useAppDispatch } from '../../hooks/useAppDispatch.ts';
 import { fetchDataTable } from '../../store/services/fetchDataTable.ts';
 import { DataTable } from '../../store/reducers/DataSliceSchema.ts';
-import { getDataTables } from '../../store/selectors/getDataValues.tsx';
+import { getDataLoading, getDataTables } from '../../store/selectors/getDataValues.tsx';
+import cls from './Table.module.scss';
 
 interface TableProps {
     className?: string;
@@ -13,12 +15,6 @@ interface TableProps {
 
 export const Table = (props: TableProps) => {
     const { className } = props;
-
-    const dispatch = useAppDispatch();
-
-    useEffect(() => {
-        dispatch(fetchDataTable());
-    }, [dispatch]);
 
     const rows = useSelector(getDataTables);
 
@@ -70,23 +66,21 @@ export const Table = (props: TableProps) => {
     ];
 
     return (
-
-                    <Box sx={{ height: 400, width: '100%' }}>
-                        <DataGrid
-                            sx={{ borderRadius: '12px' }}
-                            rows={rows as GridRowsProp<DataTable>}
-                            columns={columns}
-                            initialState={{
-                                pagination: {
-                                    paginationModel: {
-                                        pageSize: 5,
-                                    },
-                                },
-                            }}
-                            pageSizeOptions={[5]}
-                            disableRowSelectionOnClick
-                            onRowClick={(params, event, details) => { console.log(params.id); }}
-                        />
-                    </Box>
+        <Box sx={{ height: 400, width: '100%', padding: '0 20px' }}>
+            <DataGrid
+                sx={{ borderRadius: '10px' }}
+                rows={rows as GridRowsProp<DataTable>}
+                columns={columns}
+                initialState={{
+                    pagination: {
+                        paginationModel: {
+                            pageSize: 5,
+                        },
+                    },
+                }}
+                pageSizeOptions={[5]}
+                onRowClick={(params) => { console.log(params.id); }}
+            />
+        </Box>
     );
 };

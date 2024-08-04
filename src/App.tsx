@@ -1,12 +1,12 @@
 import {
     Suspense, useEffect, useState,
 } from 'react';
-import { useSelector } from 'react-redux';
+import { CircularProgress } from '@mui/material';
 import { classNames } from './lib/classNames.ts';
 import { AppRouter } from './components/AppRouter/AppRouter.tsx';
 import { useAppDispatch } from './hooks/useAppDispatch.ts';
 import { UserSliceActions } from './store/reducers/UserSlice.ts';
-import { getUserAuth } from './store/selectors/getUserAuth.tsx';
+import cls from './App.module.scss';
 
 interface appProps {
   className?: string;
@@ -29,7 +29,9 @@ export const App = (props: appProps) => {
 
     if (!inited) {
         return (
-            <div>loading</div>
+            <div className={cls.progressWrapper}>
+                <CircularProgress />
+            </div>
         );
     }
 

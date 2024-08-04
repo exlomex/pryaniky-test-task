@@ -11,8 +11,10 @@ export const NavBar = () => {
 
     return (
         <Box
-            height={50}
-            sx={{ display: 'flex', justifyContent: 'flex-end', padding: '0 10px' }}
+            height={60}
+            sx={{
+                display: 'flex', justifyContent: 'flex-end', padding: '0 20px', alignItems: 'center',
+            }}
 
         >
             <Button
@@ -20,8 +22,6 @@ export const NavBar = () => {
                 type="submit"
                 variant="contained"
                 sx={{
-                    mb: 1,
-                    mt: 1,
                     color: '#fff',
                     bgcolor: '#FF636C',
                     boxShadow: 'none',
@@ -30,6 +30,7 @@ export const NavBar = () => {
                     fontSize: '1em',
                     borderRadius: '8px',
                     textTransform: 'lowercase',
+                    height: 35,
                 }}
             >
                 Выйти
