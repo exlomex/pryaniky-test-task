@@ -1,5 +1,5 @@
 import {
-    Suspense, useEffect, useLayoutEffect, useState,
+    Suspense, useEffect, useState,
 } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from './lib/classNames.ts';
