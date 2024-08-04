@@ -1,9 +1,11 @@
 import Box from '@mui/material/Box';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material';
-import { red } from '@mui/material/colors';
-import { classNames } from '../../lib/classNames.ts';
+import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../../hooks/useAppDispatch.ts';
+import { fetchDataTable } from '../../store/services/fetchDataTable.ts';
+import { DataTable } from '../../store/reducers/DataSliceSchema.ts';
+import { getDataTables } from '../../store/selectors/getDataValues.tsx';
 
 interface TableProps {
     className?: string;
@@ -12,27 +14,15 @@ interface TableProps {
 export const Table = (props: TableProps) => {
     const { className } = props;
 
-    const theme = createTheme({
-        palette: {
-            primary: {
-                main: red[300],
-            },
-            secondary: {
-                main: red[100],
-            },
-        },
-    });
+    const dispatch = useAppDispatch();
 
-    const rows = [
-        {
-            id: 1, lastName: 'Snow', firstName: 'Jon', age: 14,
-        },
-        {
-            id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31,
-        },
-    ];
+    useEffect(() => {
+        dispatch(fetchDataTable());
+    }, [dispatch]);
 
-    const columns: GridColDef<(typeof rows)[number]>[] = [
+    const rows = useSelector(getDataTables);
+
+    const columns: GridColDef<DataTable[number]>[] = [
         { field: 'id', headerName: 'Id', width: 90 },
         {
             field: 'companySigDate',
@@ -43,25 +33,24 @@ export const Table = (props: TableProps) => {
         {
             field: 'companySignatureName',
             headerName: 'CompanySignatureName',
-            width: 150,
+            width: 200,
             editable: true,
         },
         {
             field: 'documentName',
             headerName: 'DocumentName',
-            type: 'number',
-            width: 110,
+            width: 140,
             editable: true,
         },
         {
             field: 'documentStatus',
             headerName: 'DocumentStatus',
-            width: 160,
+            width: 140,
         },
         {
             field: 'documentType',
             headerName: 'DocumentType',
-            width: 160,
+            width: 140,
         },
         {
             field: 'employeeNumber',
@@ -76,17 +65,16 @@ export const Table = (props: TableProps) => {
         {
             field: 'employeeSignatureName',
             headerName: 'EmployeeSignatureName',
-            width: 160,
+            width: 200,
         },
     ];
 
     return (
-            <ThemeProvider theme={theme}>
-                <Container component="main" maxWidth="lg" sx={{ mt: 3 }}>
+
                     <Box sx={{ height: 400, width: '100%' }}>
                         <DataGrid
                             sx={{ borderRadius: '12px' }}
-                            rows={rows}
+                            rows={rows as GridRowsProp<DataTable>}
                             columns={columns}
                             initialState={{
                                 pagination: {
@@ -96,11 +84,9 @@ export const Table = (props: TableProps) => {
                                 },
                             }}
                             pageSizeOptions={[5]}
-                            checkboxSelection
                             disableRowSelectionOnClick
+                            onRowClick={(params, event, details) => { console.log(params.id); }}
                         />
                     </Box>
-                </Container>
-            </ThemeProvider>
     );
 };

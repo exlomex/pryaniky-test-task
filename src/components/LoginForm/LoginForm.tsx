@@ -3,8 +3,13 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material';
-import { red } from '@mui/material/colors';
+import { useSelector } from 'react-redux';
+import { ChangeEvent, SyntheticEvent, useCallback } from 'react';
+import { loginByUsername, loginByUsernameProps } from '../../store/services/loginByUsername.ts';
+import { useAppDispatch } from '../../hooks/useAppDispatch.ts';
+import { getLoginIsloading, getLoginPassword, getLoginUsername } from '../../store/selectors/getLoginValues.tsx';
+import { LoginFormActions } from '../../store/reducers/LoginFormSlice.ts';
+import { LoginFormSliceSchema } from '../../store/reducers/LoginFormSliceSchema.ts';
 
 interface LoginFormProps {
     className?: string;
@@ -13,23 +18,33 @@ interface LoginFormProps {
 export const LoginForm = (props: LoginFormProps) => {
     const { className } = props;
 
-    function handleSubmit() {
-        console.log(131);
+    const userPassword = useSelector(getLoginPassword);
+    const userUsername = useSelector(getLoginUsername);
+    const userIsloading = useSelector(getLoginIsloading);
+
+    const dispatch = useAppDispatch();
+
+    const onPasswordChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        dispatch(LoginFormActions.setPassword(e.target.value));
+    }, [dispatch]);
+
+    const onUsernameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        dispatch(LoginFormActions.setLogin(e.target.value));
+    }, [dispatch]);
+
+    function handleSubmit(e) {
+        e.preventDefault();
+
+        const authData: loginByUsernameProps = {
+            username: userUsername,
+            password: userPassword,
+        };
+
+        const result = dispatch(loginByUsername(authData));
     }
 
-    const theme = createTheme({
-        palette: {
-            primary: {
-                main: red[300],
-            },
-            secondary: {
-                main: red[100],
-            },
-        },
-    });
-
     return (
-        <ThemeProvider theme={theme}>
+
             <Container component="main" maxWidth="xs">
                 <Box
                     sx={{
@@ -42,17 +57,18 @@ export const LoginForm = (props: LoginFormProps) => {
                     <Typography component="h1" variant="h5">
                         Авторизация
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                    <Box component="form" noValidate sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
                             required
                             fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
+                            id="login"
+                            label="Your login"
+                            name="login"
+                            autoComplete="login"
                             autoFocus
-
+                            value={userUsername}
+                            onChange={onUsernameChange}
                         />
                         <TextField
                             margin="normal"
@@ -64,8 +80,11 @@ export const LoginForm = (props: LoginFormProps) => {
                             id="password"
                             autoComplete="current-password"
                             color="primary"
+                            value={userPassword}
+                            onChange={onPasswordChange}
                         />
                         <Button
+                            onClick={handleSubmit}
                             type="submit"
                             fullWidth
                             variant="contained"
@@ -78,12 +97,12 @@ export const LoginForm = (props: LoginFormProps) => {
                                 fontWeight: '500',
                                 borderRadius: '8px',
                             }}
+                            disabled={userIsloading}
                         >
                             Войти
                         </Button>
                     </Box>
                 </Box>
             </Container>
-        </ThemeProvider>
     );
 };
