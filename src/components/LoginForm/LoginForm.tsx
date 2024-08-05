@@ -102,6 +102,9 @@ export const LoginForm = (props: LoginFormProps) => {
                             Войти
                         </Button>
                     </Box>
+                    <Typography component="h5" variant="h5" sx={{ fontSize: '0.875em', marginTop: '9px', color: '#525252' }}>
+                        for example: user13 password
+                    </Typography>
                 </Box>
             </Container>
     );
