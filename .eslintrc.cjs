@@ -27,7 +27,7 @@ module.exports = {
     "import/extensions": "off",
     "no-underscore-dangle": "off",
     "react/display-name": "off",
-    // "max-len": ["error", { "ignoreTrailingComments": true, "code": 100 }],
+    "max-len": ["error", { "ignoreTrailingComments": true, "code": 150 }],
     "import/no-extraneous-dependencies": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error",

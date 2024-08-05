@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LoginFormSliceSchema } from './LoginFormSliceSchema.ts';
-import { DataSliceSchema } from './DataSliceSchema.ts';
+import { DataSliceSchema, DataTable } from './DataSliceSchema.ts';
 import { fetchDataTable } from '../services/fetchDataTable.ts';
 
 const initialState: DataSliceSchema = {
@@ -10,8 +10,22 @@ export const DataSlice = createSlice({
     name: 'data',
     initialState,
     reducers: {
-        setData: (state, action: PayloadAction<DataSliceSchema[]>) => {
+        setData: (state, action: PayloadAction<DataTable[]>) => {
             state.table = action.payload;
+        },
+        addData: (state, action: PayloadAction<DataTable[]>) => {
+            state.table.push(action.payload);
+        },
+        editData: (state, action: PayloadAction<DataTable>) => {
+            state.table = state.table.map((row) => {
+                if (action.payload.id === row.id) {
+                    row = action.payload;
+                }
+                return row;
+            });
+        },
+        deleteRow: (state, action: PayloadAction<string>) => {
+            state.table = state.table.filter((row) => row.id !== action.payload);
         },
     },
     extraReducers: (builder) => {

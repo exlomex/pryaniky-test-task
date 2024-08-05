@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
-import { Skeleton } from '@mui/material';
-import { useEffect } from 'react';
+import { Dialog, Skeleton } from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
 import { classNames } from '../../lib/classNames.ts';
 import { Table } from '../../components/Table';
 import { NavBar } from '../../components/NavBar';
@@ -26,16 +26,23 @@ const InfoPage = (props: InfoPageProps) => {
         dispatch(fetchDataTable());
     }, [dispatch]);
 
+    const [isAdditionalButtonsActive, setIsAdditionalButtonsActive] = useState(false);
+
+    const setTrueAdditionalButtons = useCallback(() => {
+        setIsAdditionalButtonsActive(true);
+    }, []);
+
     if (tableLoading) {
         return (
             <TableLayout/>
         );
     }
+
     return (
         <div className={classNames('', {}, [className])}>
             <NavBar/>
-            <Table/>
-            <CrudButtons/>
+            <Table setIsAdditionalButtonsActive={setTrueAdditionalButtons} />
+            <CrudButtons isButtonsActive={isAdditionalButtonsActive} />
         </div>
     );
 };

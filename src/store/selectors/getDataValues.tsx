@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { LoginFormSliceSchema } from '../reducers/LoginFormSliceSchema.ts';
 import { getData } from './getData.ts';
-import { DataSliceSchema } from '../reducers/DataSliceSchema.ts';
+import { DataSliceSchema, DataTable } from '../reducers/DataSliceSchema.ts';
 
 export const getDataTables = createSelector(
     getData,
@@ -13,5 +13,5 @@ export const getDataLoading = createSelector(
 );
 export const getDataError = createSelector(
     getData,
-    (data: LoginFormSliceSchema) => data.error,
+    (data: DataSliceSchema) => data.error,
 );

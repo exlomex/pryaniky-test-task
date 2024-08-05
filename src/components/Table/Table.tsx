@@ -1,22 +1,28 @@
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Skeleton } from '@mui/material';
-import { useAppDispatch } from '../../hooks/useAppDispatch.ts';
-import { fetchDataTable } from '../../store/services/fetchDataTable.ts';
+import { GridRowParams } from '@mui/x-data-grid/models/params/gridRowParams';
 import { DataTable } from '../../store/reducers/DataSliceSchema.ts';
-import { getDataLoading, getDataTables } from '../../store/selectors/getDataValues.tsx';
-import cls from './Table.module.scss';
+import { getDataTables } from '../../store/selectors/getDataValues.tsx';
+import { useAppDispatch } from '../../hooks/useAppDispatch.ts';
+import { ModalDataActions } from '../../store/reducers/ModalDataSlice.ts';
 
 interface TableProps {
-    className?: string;
+    setIsAdditionalButtonsActive: () => void
 }
 
 export const Table = (props: TableProps) => {
-    const { className } = props;
+    const { setIsAdditionalButtonsActive } = props;
 
     const rows = useSelector(getDataTables);
+
+    const dispatch = useAppDispatch();
+
+    const handleRowClick = useCallback((params: GridRowParams) => {
+        setIsAdditionalButtonsActive();
+        dispatch(ModalDataActions.setSelectedRow(params.row.id));
+    }, [dispatch, setIsAdditionalButtonsActive]);
 
     const columns: GridColDef<DataTable[number]>[] = [
         { field: 'id', headerName: 'Id', width: 90 },
@@ -79,7 +85,7 @@ export const Table = (props: TableProps) => {
                     },
                 }}
                 pageSizeOptions={[5]}
-                onRowClick={(params) => { console.log(params.id); }}
+                onRowClick={(params) => { handleRowClick(params); }}
             />
         </Box>
     );
