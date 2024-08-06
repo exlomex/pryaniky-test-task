@@ -2,6 +2,10 @@
 
 https://github.com/user-attachments/assets/557082da-a3bd-41af-8d39-acb6a84188dd
 
+### Деплой
+
+Ссылка на приложение - https://pryaniky-test-task-eight.vercel.app/
+
 ### Описание проекта
 
 Тестовое задание -  https://clck.ru/3Acaxf
